@@ -13,6 +13,19 @@ declare global {
       receiveHello: (handler: (event, args) => void) => void;
       stopReceivingHello: (handler: (event, args) => void) => void;
     };
+    app: {
+      getAppName: () => void;
+      receiveAppName: (handler: (event, appname: string) => void) => void;
+      stopReceivingAppName: (handler: (event, args) => void) => void;
+      closeApp: (handler: (event, args) => void) => void;
+      maximizeAndRestore: (handler: (event, args) => void) => void;
+      stopReceivingMaximizeAndRestore: (handler: (event, args) => void) => void;
+      minimize: (handler: (event, args) => void) => void;
+    }
+
+    monitoring: {
+
+    }
   }
 }
 

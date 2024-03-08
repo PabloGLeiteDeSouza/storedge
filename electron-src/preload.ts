@@ -13,4 +13,22 @@ contextBridge.exposeInMainWorld("electron", {
   stopReceivingHello: (
     handler: (event: IpcRendererEvent, ...args: any[]) => void,
   ) => ipcRenderer.removeListener("message", handler),
+  
 });
+
+contextBridge.exposeInMainWorld("app",  {
+  getAppName: () => ipcRenderer.send("get-app-name"),
+  receiveAppName: (handler: (event: IpcRendererEvent, ...args: any[]) => void) =>
+    ipcRenderer.on("get-app-name", handler),
+  stopReceivingAppName: (
+    handler: (event: IpcRendererEvent, ...args: any[]) => void,
+  ) => ipcRenderer.removeListener("get-app-name", handler),
+  closeApp: () => ipcRenderer.send('close-app'),
+  maximizeAndRestore: (handler: (event: IpcRendererEvent, ...args: any[]) => void) => { ipcRenderer.send('maximize-and-restore-app'); ipcRenderer.on('maximize-and-restore-app', handler); },
+  stopReceivingMaximizeAndRestore: (handler: (event: IpcRendererEvent, ...args: any[]) => void) => ipcRenderer.removeListener("maximize-and-restore-app", handler),
+  minimize: (handler: (event: IpcRendererEvent, ...args: any[]) => void) => { ipcRenderer.send("minimize-app"); ipcRenderer.on("minimize-app", handler); ipcRenderer.removeListener("minimize-app", handler)},
+})
+
+contextBridge.exposeInMainWorld("monitoring", {
+
+})
