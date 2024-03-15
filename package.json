@@ -27,6 +27,8 @@
     "@types/react-dom": "^16.9.24",
     "autoprefixer": "^10.4.18",
     "daisyui": "^4.7.2",
+    "dotenv": "^16.4.5",
+    "dotenv-expand": "^11.0.6",
     "electron": "^27.1.2",
     "electron-builder": "^24.9.1",
     "next": "latest",

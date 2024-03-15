@@ -5,6 +5,9 @@
 // import User from 'path/to/interfaces';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 
+
+type CallbackType =  (event: string, file: string | Buffer) => Promise<void> | void;
+
 declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   interface Window {
@@ -23,8 +26,10 @@ declare global {
       minimize: (handler: (event, args) => void) => void;
     }
 
-    monitoring: {
-
+    ApiFileManager: {
+      createEvent: (handler: (event, resp: boolean, error: unknown, ...args: any[]) => void, Directory: string, Destination: string, Callback: CallbackType, ...Events: string[]) => void
+      removeEventListener: (handler: (event, resp: boolean, error: unknown, ...args: any[]) => void, Directory: string, Callback: CallbackType) => void
+      removeAllListeners: (handler: (event, resp: boolean, error: unknown, ...args: any[]) => void, Directory: string) => void
     }
   }
 }

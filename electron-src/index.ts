@@ -6,6 +6,7 @@ import { format } from "url";
 import { BrowserWindow, app, ipcMain, IpcMainEvent } from "electron";
 import isDev from "electron-is-dev";
 import prepareNext from "electron-next";
+import { CallbackType, CreateEventReadDirectoryAndSendEmail, removeAllListeners, removeListener } from "./apis/file-manager";
 
 // Prepare the renderer once the app is ready
 app.on("ready", async () => {
@@ -66,4 +67,31 @@ ipcMain.on("close-app", () => {
   app.exit();
 })
 
+ipcMain.on('api-file-manager-create-event-email', async (event, Directory: string, Destination: string, Callback: CallbackType, ...Events: string[]) => {
+    try {
+      await CreateEventReadDirectoryAndSendEmail(Directory, Destination, Callback, ...Events);
+      event.sender.send('api-file-manager-create-event-email', true)
+    } catch (error) {
+      event.sender.send('api-file-manager-create-event-email', false, error);
+    }
+});
+
+ipcMain.on('api-file-manager-remove-event', (event, Directory: string, Callback: CallbackType) => {
+    try {
+      removeListener(Directory, Callback);
+      event.sender.send('api-file-manager-delete-event', true)
+    } catch (error) {
+      event.sender.send('api-file-manager-delete-event', false, error);
+    }
+    
+});
+
+ipcMain.on('api-file-manager-remove-all-events', (event, Directory: string) => {
+    try {
+      removeAllListeners(Directory);
+      event.sender.send('api-file-manager-remove-all-events', true);
+    } catch (error) {
+      event.sender.send('api-file-manager-remove-all-events', false, error);
+    }
+});
 
