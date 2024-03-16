@@ -2,6 +2,7 @@
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { contextBridge, ipcRenderer } from "electron";
 import { IpcRendererEvent } from "electron/main";
+import { CallbackType } from "./apis/file-manager";
 
 // We are using the context bridge to securely expose NodeAPIs.
 // Please note that many Node APIs grant access to local system resources.
@@ -29,6 +30,8 @@ contextBridge.exposeInMainWorld("app",  {
   minimize: (handler: (event: IpcRendererEvent, ...args: any[]) => void) => { ipcRenderer.send("minimize-app"); ipcRenderer.on("minimize-app", handler); ipcRenderer.removeListener("minimize-app", handler)},
 })
 
-contextBridge.exposeInMainWorld("monitoring", {
-
+contextBridge.exposeInMainWorld("ApiFileManager", {
+  createEvent: (handler: (event: IpcRendererEvent, ...args: any[]) => void, Directory: string, Destination: string, Callback: CallbackType, ...Events: string[]) => { ipcRenderer.send('api-file-manager-create-event-email', Directory, Destination, Callback, ...Events); ipcRenderer.on('api-file-manager-create-event-email', handler); ipcRenderer.removeListener('api-file-manager-create-event-email', handler); },
+  removeEventListener: (handler: (event: IpcRendererEvent, ...args: any[]) => void, Directory: string, Callback: CallbackType) => { ipcRenderer.send('api-file-manager-remove-event', Directory, Callback); ipcRenderer.on('api-file-manager-remove-event', handler); ipcRenderer.removeListener('api-file-manager-remove-event', handler); },  
+  removeAllListeners: (handler: (event: IpcRendererEvent, ...args: any[]) => void, Directory: string) => { ipcRenderer.send('api-file-manager-remove-all-events', Directory); ipcRenderer.on('api-file-manager-remove-all-events', handler); ipcRenderer.removeListener('api-file-manager-remove-all-events', handler); },
 })
